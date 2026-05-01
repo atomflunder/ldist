@@ -112,6 +112,10 @@ fmt.Printf("Normalized Similarity: %.2f\n", normalizedSim)
 // Normalized Similarity: 0.82
 ```
 
+## API Reference
+
+Can be found in the [GoDoc](https://pkg.go.dev/github.com/atomflunder/ldist).
+
 ## Testing & Coverage
 
 You can run the tests using the following command:
