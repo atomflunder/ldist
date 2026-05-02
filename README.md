@@ -1,4 +1,6 @@
 # ldist
+[![Go Reference](https://pkg.go.dev/badge/github.com/atomflunder/ldist.svg)](https://pkg.go.dev/github.com/atomflunder/ldist) [![Test / CI](https://github.com/atomflunder/ldist/actions/workflows/ci.yml/badge.svg)](https://github.com/atomflunder/ldist/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/atomflunder/ldist/graph/badge.svg?token=ONLF7D1OBG)](https://codecov.io/gh/atomflunder/ldist)
+
 A Go implementation of a Levenshtein distance based string matching algorithm. Designed to be easy, fast and flexible to use with no dependencies.
 
 ## Installation
