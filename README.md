@@ -79,7 +79,6 @@ w := ldist.GetWeights()
 // Uses the ToLowercase and RemoveWhitespace options to pre-process the strings before calculating the distance.
 // This would convert "  SITTING  " into "sitting".
 dist := ldist.Distance(s1, s2, weights, ldist.ToLowercase, ldist.RemoveWhitespace)
-
 fmt.Printf("Distance with Options: %d\n", dist)
 // Output: Distance with Options: 3
 ```
