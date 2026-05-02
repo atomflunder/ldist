@@ -32,10 +32,10 @@ func TestRemovePunctuation(t *testing.T) {
 	}
 }
 
-func TestAlphanumeric(t *testing.T) {
+func TestToAlphanumeric(t *testing.T) {
 	s1 := "Hello, World! 123"
 	s2 := "Hello, World! 123"
-	Alphanumeric(&s1, &s2)
+	ToAlphanumeric(&s1, &s2)
 	expected := "HelloWorld123"
 	if s1 != expected || s2 != expected {
 		t.Errorf("Expected both strings to be %s, but got %s and %s", expected, s1, s2)

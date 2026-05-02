@@ -23,8 +23,8 @@ func RemovePunctuation(s1, s2 *string) {
 	}
 }
 
-// Alphanumeric removes all non-alphanumeric characters from both strings.
-func Alphanumeric(s1, s2 *string) {
+// ToAlphanumeric removes all non-alphanumeric characters from both strings.
+func ToAlphanumeric(s1, s2 *string) {
 	var sb1, sb2 strings.Builder
 	for _, r := range *s1 {
 		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') {
