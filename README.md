@@ -96,6 +96,7 @@ import (
 
 s1 := "kitten"
 s2 := "  SITTING  "
+
 w := ldist.GetWeights()
 
 // Custom option to modify each string in place.
