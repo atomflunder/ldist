@@ -84,6 +84,31 @@ fmt.Printf("Distance with Options: %d\n", dist)
 // Output: Distance with Options: 3
 ```
 
+### Custom Options
+
+Any Option is a function that takes in two string pointers to modify them in place. You can create your own custom options to pre-process the strings in any way you like before calculating the distance.
+
+```go
+import (
+    "fmt"
+    "github.com/atomflunder/ldist"
+)
+
+s1 := "kitten"
+s2 := "  SITTING  "
+w := ldist.GetWeights()
+
+// Custom option to modify each string in place.
+// In a real use case you would probably want to do something more useful.
+myOption := func (s1, s2 *string) {
+	*s1, *s2 = "Option 1", "Option 2"
+}
+
+dist := ldist.Distance(s1, s2, w, myOption)
+fmt.Printf("Distance with Custom Option: %d\n", dist)
+// Output: Distance with Custom Option: 1
+```
+
 ### Normalized Functions
 
 The package also provides normalized versions of the distance and similarity functions, which return values between 0 and 1 based on the maximum possible distance for the given strings.
