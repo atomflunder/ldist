@@ -217,3 +217,23 @@ and some more text to make it even longer and more different from the other stri
 		Distance(s1, s2, weights)
 	}
 }
+
+func BenchmarkSimilarStrings(b *testing.B) {
+	weights := GetWeights()
+	s1 := `a really, really, really different and long string to compare it to
+with multiple lines and some special characters!@#$%^&*()_+
+and some more text to make it even longer and more different from the other string
+and some more text to make it even longer and more different from the other string
+==================================================================================
+and some more text to make it even longer and more different from the other string`
+	s2 := `a really, really, really different and long string to compare it to
+with multiple lines and some special characters!@#$%^&*()_+
+and some more text to make it even longer and more different from the other string
+and this line is totally different and will increase the distance a lot, i hope so
+==================================================================================
+and some more text to make it even longer and more different from the other string`
+
+	for b.Loop() {
+		Distance(s1, s2, weights)
+	}
+}

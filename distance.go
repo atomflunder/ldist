@@ -7,6 +7,22 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 		opt(&s1, &s2)
 	}
 
+	// Trims common prefix, speeds up calculations for long strings.
+	start := 0
+	for start < len(s1) && start < len(s2) && s1[start] == s2[start] {
+		start++
+	}
+	if start > 0 {
+		s1 = s1[start:]
+		s2 = s2[start:]
+	}
+
+	// Same with the suffix.
+	for len(s1) > 0 && len(s2) > 0 && s1[len(s1)-1] == s2[len(s2)-1] {
+		s1 = s1[:len(s1)-1]
+		s2 = s2[:len(s2)-1]
+	}
+
 	if len(s1) == 0 {
 		return len(s2) * weights.Insertion
 	} else if len(s2) == 0 {
