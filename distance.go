@@ -29,9 +29,6 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 		return len(s1) * weights.Deletion
 	}
 
-	if s1 == s2 {
-		return 0
-	}
 	n := len(s1)
 	m := len(s2)
 
