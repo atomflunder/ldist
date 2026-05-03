@@ -126,6 +126,34 @@ func TestWithOptions(t *testing.T) {
 	}
 }
 
+func TestTrimSuffix(t *testing.T) {
+	weights := GetWeights()
+
+	s1 := "kitten"
+	s2 := "mitten"
+
+	expected := 1
+	actual := Distance(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if actual != expected {
+		t.Errorf("Expected distance between %s and %s to be %d, but got %d", s1, s2, expected, actual)
+	}
+}
+
+func TestSameString(t *testing.T) {
+	weights := GetWeights()
+
+	s1 := "kitten"
+	s2 := "kitten"
+
+	expected := 0
+	actual := Distance(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if actual != expected {
+		t.Errorf("Expected distance between %s and %s to be %d, but got %d", s1, s2, expected, actual)
+	}
+}
+
 func ExampleDistance() {
 	weights := GetWeights()
 
