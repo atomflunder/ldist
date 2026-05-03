@@ -218,7 +218,7 @@ and some more text to make it even longer and more different from the other stri
 	}
 }
 
-func BenchmarkSimilarStrings(b *testing.B) {
+func BenchmarkSimilarLongStrings(b *testing.B) {
 	weights := GetWeights()
 	s1 := `a really, really, really different and long string to compare it to
 with multiple lines and some special characters!@#$%^&*()_+

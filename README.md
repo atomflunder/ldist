@@ -169,10 +169,11 @@ go test -bench=.
 Results (on my machine):
 
 ```bash
-BenchmarkDistance-32                	11266522	        95.96 ns/op
-BenchmarkNormalizedDistance-32      	12367748	        96.25 ns/op
-BenchmarkNormalizedSimilarity-32    	12120586	        98.67 ns/op
-BenchmarkLongStrings-32             	  988434	      1214 ns/op
+BenchmarkDistance-32                	12756720	        97.12 ns/op
+BenchmarkNormalizedDistance-32      	12374305	        97.82 ns/op
+BenchmarkNormalizedSimilarity-32    	12481605	        98.47 ns/op
+BenchmarkLongStrings-32             	  944058	      1247 ns/op
+BenchmarkSimilarLongStrings-32      	  144933	      8122 ns/op
 ```
 
 ## Contributing
