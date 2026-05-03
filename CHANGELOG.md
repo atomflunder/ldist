@@ -2,6 +2,10 @@
 
 This is a broad overview of the changes that have been made over the lifespan of this library.
 
+## v0.3.1 - 2026-05-03
+
+- Remove unnecessary check for empty strings
+
 ## v0.3.0 - 2026-05-03
 
 - Small performance improvements
