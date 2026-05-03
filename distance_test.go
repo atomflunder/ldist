@@ -126,7 +126,7 @@ func TestWithOptions(t *testing.T) {
 	}
 }
 
-func TestTrimSuffix(t *testing.T) {
+func TestCommonSuffix(t *testing.T) {
 	weights := GetWeights()
 
 	s1 := "kitten"
@@ -151,6 +151,104 @@ func TestSameString(t *testing.T) {
 
 	if actual != expected {
 		t.Errorf("Expected distance between %s and %s to be %d, but got %d", s1, s2, expected, actual)
+	}
+}
+
+func TestPartialSimilarity(t *testing.T) {
+	weights := GetIndelWeights()
+
+	s1 := "a test"
+	s2 := "this is a test"
+
+	expected := 0.85
+	actual := PartialSimilarity(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %f, but got %f", s1, s2, expected, actual)
+	}
+
+	s1 = "this"
+	s2 = "this is a test"
+
+	expected = 0.75
+	actual = PartialSimilarity(s1, s2, weights)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %.9f, but got %.9f", s1, s2, expected, actual)
+	}
+
+	s1 = "test124"
+	s2 = "93210"
+
+	expected = 0.158333333
+	actual = PartialSimilarity(s1, s2, weights)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %.9f, but got %.9f", s1, s2, expected, actual)
+	}
+
+	s1 = "ab"
+	s2 = "dabuz"
+
+	expected = 0.95
+	actual = PartialSimilarity(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %f, but got %f", s1, s2, expected, actual)
+	}
+
+	s1 = "d"
+	s2 = "dabuz"
+
+	expected = 0.85
+	actual = PartialSimilarity(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %f, but got %f", s1, s2, expected, actual)
+	}
+
+	s1 = "dabuz"
+	s2 = "d"
+
+	expected = 0.85
+	actual = PartialSimilarity(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %f, but got %f", s1, s2, expected, actual)
+	}
+}
+
+func TestPartialEdgeCases(t *testing.T) {
+	weights := GetIndelWeights()
+
+	s1 := ""
+	s2 := "dabuz"
+
+	expected := 0.0
+	actual := PartialSimilarity(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %f, but got %f", s1, s2, expected, actual)
+	}
+
+	s1 = "dabuz"
+	s2 = "dabuz"
+
+	expected = 1.0
+	actual = PartialSimilarity(s1, s2, weights, ToLowercase, RemoveWhitespace)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %f, but got %f", s1, s2, expected, actual)
+	}
+
+	s1 = "a "
+	s2 = "this is a really really damn long string, wow"
+
+	expected = 0.65
+	actual = PartialSimilarity(s1, s2, weights)
+
+	if math.Abs(expected-actual) > f64Epsilon {
+		t.Errorf("Expected distance between %s and %s to be %f, but got %f", s1, s2, expected, actual)
 	}
 }
 
@@ -199,6 +297,17 @@ func ExampleNormalizedSimilarity() {
 
 	// Output:
 	// Normalized Similarity: 0.76923077
+}
+
+func ExamplePartialSimilarity() {
+	weights := GetIndelWeights()
+
+	s1 := "a test"
+	s2 := "this is a test"
+
+	fmt.Printf("Partial Similarity: %.8f\n", PartialSimilarity(s1, s2, weights))
+	// Output:
+	// Partial Similarity: 0.85000000
 }
 
 func BenchmarkDistance(b *testing.B) {
@@ -263,5 +372,15 @@ and some more text to make it even longer and more different from the other stri
 
 	for b.Loop() {
 		Distance(s1, s2, weights)
+	}
+}
+
+func BenchmarkPartialSimilarity(b *testing.B) {
+	weights := GetIndelWeights()
+	s1 := "a test"
+	s2 := "this is a test"
+
+	for b.Loop() {
+		PartialSimilarity(s1, s2, weights)
 	}
 }

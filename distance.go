@@ -7,21 +7,8 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 		opt(&s1, &s2)
 	}
 
-	// Trims common prefix, speeds up calculations for long strings.
-	start := 0
-	for start < len(s1) && start < len(s2) && s1[start] == s2[start] {
-		start++
-	}
-	if start > 0 {
-		s1 = s1[start:]
-		s2 = s2[start:]
-	}
-
-	// Same with the suffix.
-	for len(s1) > 0 && len(s2) > 0 && s1[len(s1)-1] == s2[len(s2)-1] {
-		s1 = s1[:len(s1)-1]
-		s2 = s2[:len(s2)-1]
-	}
+	trimPrefix(&s1, &s2)
+	trimSuffix(&s1, &s2)
 
 	if len(s1) == 0 {
 		return len(s2) * weights.Insertion
@@ -74,4 +61,71 @@ func NormalizedDistance(s1, s2 string, weights Weights, opts ...Option) float64 
 // This means that the normalized similarity is 1 when the strings are identical and approaches 0 as the strings become more different.
 func NormalizedSimilarity(s1, s2 string, weights Weights, opts ...Option) float64 {
 	return 1.0 - NormalizedDistance(s1, s2, weights, opts...)
+}
+
+// PartialSimilarity calculates the partial similarity between two strings s1 and s2 using the provided weights for substitution, insertion, and deletion.
+// The partial similarity is a measure of how similar the shorter string is to any substring of the longer string.
+// This may yield more desirable results when comparing strings of vastly differing lengths, depending on the use-case.
+func PartialSimilarity(s1, s2 string, weights Weights, opts ...Option) float64 {
+	for _, opt := range opts {
+		opt(&s1, &s2)
+	}
+
+	if len(s1) == 0 || len(s2) == 0 {
+		return 0.0
+	}
+
+	if s1 == s2 {
+		return 1.0
+	}
+
+	var longer, shorter string
+	if len(s1) >= len(s2) {
+		longer, shorter = s1, s2
+	} else {
+		longer, shorter = s2, s1
+	}
+
+	blocks := getMatchingBlocks(longer, shorter)
+
+	filteredBlocks := make([]matchingBlock, 0, len(blocks))
+	for _, block := range blocks {
+		if block.length > 1 || (block.length == 1 && block.srcPos == 0 && block.destPos == 0) {
+			filteredBlocks = append(filteredBlocks, block)
+		}
+	}
+
+	diff := len(longer) - len(shorter)
+
+	mult := 1.0
+	switch {
+	case diff >= 20:
+		mult = 0.65
+	case diff >= 10:
+		mult = 0.75
+	case diff >= 4:
+		mult = 0.85
+	case diff >= 1:
+		mult = 0.95
+	}
+
+	scores := make([]float64, len(filteredBlocks))
+
+	for _, block := range filteredBlocks {
+		start := max(0, block.srcPos-block.destPos)
+		sub := longer[start : start+len(shorter)]
+
+		scores = append(scores, NormalizedSimilarity(sub, shorter, weights))
+	}
+
+	scores = append(scores, NormalizedSimilarity(longer, shorter, weights))
+
+	var maxScore float64
+	for _, score := range scores {
+		if score > maxScore {
+			maxScore = score
+		}
+	}
+
+	return maxScore * mult
 }

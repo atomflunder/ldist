@@ -139,6 +139,31 @@ fmt.Printf("Normalized Similarity: %.2f\n", normalizedSim)
 // Normalized Similarity: 0.82
 ```
 
+### Partial Matching
+
+You can also calculate the distance between two strings using partial matching, which finds the best matching substring in the longer string and calculates the distance based on that.
+
+```go
+import (
+    "fmt"
+    "github.com/atomflunder/ldist"
+)
+
+s1 := "test"
+s2 := "this is a test"
+
+w := ldist.GetWeights()
+
+normalizedSim := ldist.NormalizedSimilarity(s1, s2, w)
+partialSim := ldist.NormalizedSimilarity(s1, s2, w)
+
+fmt.Printf("Normalized Similarity: %.2f\n", normalizedSim)
+fmt.Printf("Partial Similarity: %.2f\n", partialSim)
+// Output:
+// Normalized Similarity: 0.60
+// Partial Similarity: 0.85
+```
+
 ## API Reference
 
 Can be found in the [GoDoc](https://pkg.go.dev/github.com/atomflunder/ldist).
@@ -169,11 +194,12 @@ go test -bench=.
 Results (on my machine):
 
 ```bash
-BenchmarkDistance-32                	12756720	        97.12 ns/op
-BenchmarkNormalizedDistance-32      	12374305	        97.82 ns/op
-BenchmarkNormalizedSimilarity-32    	12481605	        98.47 ns/op
-BenchmarkLongStrings-32             	  944058	      1247 ns/op
-BenchmarkSimilarLongStrings-32      	  144933	      8122 ns/op
+BenchmarkDistance-32                	11110988	        98.05 ns/op
+BenchmarkNormalizedDistance-32      	12607795	        96.33 ns/op
+BenchmarkNormalizedSimilarity-32    	12237752	        98.92 ns/op
+BenchmarkLongStrings-32             	  981541	         1227 ns/op
+BenchmarkSimilarLongStrings-32      	  141498	         8510 ns/op
+BenchmarkPartialSimilarity-32       	 4566796	        260.0 ns/op
 ```
 
 ## Contributing
