@@ -51,14 +51,13 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 			del := prev[j] + weights.Deletion
 			ins := cur[j-1] + weights.Insertion
 			sub := prev[j-1] + cost
-			min := del
-			if ins < min {
-				min = ins
+			if ins < del {
+				del = ins
 			}
-			if sub < min {
-				min = sub
+			if sub < del {
+				del = sub
 			}
-			cur[j] = min
+			cur[j] = del
 		}
 		prev, cur = cur, prev
 	}
