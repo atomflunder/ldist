@@ -154,8 +154,11 @@ s2 := "this is a test"
 
 w := ldist.GetWeights()
 
+// The normal similarity for comparision.
 normalizedSim := ldist.NormalizedSimilarity(s1, s2, w)
-partialSim := ldist.NormalizedSimilarity(s1, s2, w)
+
+// The partial similarity finds the best matching substring in the longer string and calculates the similarity based on that.
+partialSim := ldist.PartialSimilarity(s1, s2, w)
 
 fmt.Printf("Normalized Similarity: %.2f\n", normalizedSim)
 fmt.Printf("Partial Similarity: %.2f\n", partialSim)
