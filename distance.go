@@ -10,7 +10,7 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 	if len(s1) == 0 {
 		return len(s2) * weights.Insertion
 	} else if len(s2) == 0 {
-		return len(s1) * weights.Insertion
+		return len(s1) * weights.Deletion
 	}
 
 	if s1 == s2 {
