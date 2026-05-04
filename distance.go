@@ -119,7 +119,7 @@ func PartialSimilarity(s1, s2 string, weights Weights, opts ...Option) float64 {
 		mult = 0.95
 	}
 
-	scores := make([]float64, len(filteredBlocks))
+	scores := make([]float64, 0, len(filteredBlocks)+1)
 
 	for _, block := range filteredBlocks {
 		start := max(0, block.srcPos-block.destPos)
