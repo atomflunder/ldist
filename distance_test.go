@@ -9,7 +9,7 @@ import (
 const f64Epsilon = 1e-9
 
 func TestBasicDistance(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "sitting"
@@ -33,7 +33,7 @@ func TestBasicDistance(t *testing.T) {
 }
 
 func TestEdgeCases(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := ""
 	s2 := "abc"
@@ -85,7 +85,7 @@ func TestDistanceWithCustomWeights(t *testing.T) {
 }
 
 func TestNormalizedDistance(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "sitting"
@@ -99,7 +99,7 @@ func TestNormalizedDistance(t *testing.T) {
 }
 
 func TestNormalizedSimilarity(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "sitting"
@@ -113,7 +113,7 @@ func TestNormalizedSimilarity(t *testing.T) {
 }
 
 func TestWithOptions(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "SITTING  "
@@ -127,7 +127,7 @@ func TestWithOptions(t *testing.T) {
 }
 
 func TestCommonSuffix(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "mitten"
@@ -141,7 +141,7 @@ func TestCommonSuffix(t *testing.T) {
 }
 
 func TestSameString(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "kitten"
@@ -155,7 +155,7 @@ func TestSameString(t *testing.T) {
 }
 
 func TestPartialSimilarity(t *testing.T) {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 
 	s1 := "a test"
 	s2 := "this is a test"
@@ -219,7 +219,7 @@ func TestPartialSimilarity(t *testing.T) {
 }
 
 func TestPartialEdgeCases(t *testing.T) {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 
 	s1 := ""
 	s2 := "dabuz"
@@ -253,7 +253,7 @@ func TestPartialEdgeCases(t *testing.T) {
 }
 
 func ExampleDistance() {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "  SITTING  "
@@ -276,7 +276,7 @@ func ExampleDistance() {
 }
 
 func ExampleNormalizedDistance() {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "sitting"
@@ -288,7 +288,7 @@ func ExampleNormalizedDistance() {
 }
 
 func ExampleNormalizedSimilarity() {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "kitten"
 	s2 := "sitting"
@@ -300,7 +300,7 @@ func ExampleNormalizedSimilarity() {
 }
 
 func ExamplePartialSimilarity() {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 
 	s1 := "a test"
 	s2 := "this is a test"
@@ -311,7 +311,7 @@ func ExamplePartialSimilarity() {
 }
 
 func BenchmarkDistance(b *testing.B) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 	s1 := "kitten"
 	s2 := "sitting"
 
@@ -321,7 +321,7 @@ func BenchmarkDistance(b *testing.B) {
 }
 
 func BenchmarkNormalizedDistance(b *testing.B) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 	s1 := "kitten"
 	s2 := "sitting"
 
@@ -331,7 +331,7 @@ func BenchmarkNormalizedDistance(b *testing.B) {
 }
 
 func BenchmarkNormalizedSimilarity(b *testing.B) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 	s1 := "kitten"
 	s2 := "sitting"
 
@@ -341,7 +341,7 @@ func BenchmarkNormalizedSimilarity(b *testing.B) {
 }
 
 func BenchmarkLongStrings(b *testing.B) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 	s1 := `a really, really, really different and long string to compare it to
 with multiple lines and some special characters!@#$%^&*()_+
 and some more text to make it even longer and more different from the other string
@@ -356,7 +356,7 @@ and some more text to make it even longer and more different from the other stri
 }
 
 func BenchmarkSimilarLongStrings(b *testing.B) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 	s1 := `a really, really, really different and long string to compare it to
 with multiple lines and some special characters!@#$%^&*()_+
 and some more text to make it even longer and more different from the other string
@@ -376,7 +376,7 @@ and some more text to make it even longer and more different from the other stri
 }
 
 func BenchmarkPartialSimilarity(b *testing.B) {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 	s1 := "a test"
 	s2 := "this is a test"
 
@@ -386,7 +386,7 @@ func BenchmarkPartialSimilarity(b *testing.B) {
 }
 
 func TestUnicodeDistance(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	tests := []struct {
 		s1, s2   string
@@ -412,7 +412,7 @@ func TestUnicodeDistance(t *testing.T) {
 }
 
 func TestUnicodeNormalizedDistance(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	expected := 1.0 / 8.0
 	actual := NormalizedDistance("café", "cafe", weights)
@@ -423,7 +423,7 @@ func TestUnicodeNormalizedDistance(t *testing.T) {
 }
 
 func TestUnicodePartialSimilarity(t *testing.T) {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 
 	actual := PartialSimilarity("日本", "私は日本人です", weights)
 	if actual <= 0.0 {
@@ -432,7 +432,7 @@ func TestUnicodePartialSimilarity(t *testing.T) {
 }
 
 func TestLongStringDistance(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn"
 	s2 := "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmo"
@@ -446,7 +446,7 @@ func TestLongStringDistance(t *testing.T) {
 }
 
 func TestLongStringPartialSimilarity(t *testing.T) {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 
 	s1 := "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn"
 	s2 := "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmo"
@@ -458,7 +458,7 @@ func TestLongStringPartialSimilarity(t *testing.T) {
 }
 
 func TestPartialSimilarityBoundsClamping(t *testing.T) {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 
 	// "xxab" (longer) has "ab" matching at srcPos=2, destPos=0 with "abc" (shorter).
 	// start=2, end=2+3=5 > len("xxab")=4, so the clamping branch is hit.
@@ -469,7 +469,7 @@ func TestPartialSimilarityBoundsClamping(t *testing.T) {
 }
 
 func TestNormalizedDistanceTabVsSpace(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	s1 := "\t"
 	s2 := " "

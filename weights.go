@@ -4,18 +4,18 @@ package ldist
 type Weights struct {
 	// Substitution is the cost of substituting one character for another.
 	// By default it should be set to 1.
-	Substitution int
+	Substitution int `json:"substitution"`
 	// Insertion is the cost of inserting a character into a string.
 	// By default it should be set to 1.
-	Insertion int
+	Insertion int `json:"insertion"`
 	// Deletion is the cost of deleting a character from a string.
 	// By default it should be set to 1.
-	Deletion int
+	Deletion int `json:"deletion"`
 }
 
-// GetWeights returns the default distance weights for substitution, insertion, and deletion.
+// DefaultWeights returns the default distance weights for substitution, insertion, and deletion.
 // Substitution: 1, Insertion: 1, Deletion: 1
-func GetWeights() Weights {
+func DefaultWeights() Weights {
 	return Weights{
 		Substitution: 1,
 		Insertion:    1,
@@ -23,9 +23,9 @@ func GetWeights() Weights {
 	}
 }
 
-// GetIndelWeights returns the distance weights for substitution, insertion, and deletion where substitutions are more expensive than insertions and deletions.
+// IndelWeights returns the distance weights for substitution, insertion, and deletion where substitutions are more expensive than insertions and deletions.
 // Substitution: 2, Insertion: 1, Deletion: 1
-func GetIndelWeights() Weights {
+func IndelWeights() Weights {
 	return Weights{
 		Substitution: 2,
 		Insertion:    1,

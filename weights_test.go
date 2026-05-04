@@ -3,7 +3,7 @@ package ldist
 import "testing"
 
 func TestGetWeights(t *testing.T) {
-	weights := GetWeights()
+	weights := DefaultWeights()
 
 	if weights.Substitution != 1 {
 		t.Errorf("Expected Substitution weight to be 1, but got %d", weights.Substitution)
@@ -17,7 +17,7 @@ func TestGetWeights(t *testing.T) {
 }
 
 func TestGetIndelWeights(t *testing.T) {
-	weights := GetIndelWeights()
+	weights := IndelWeights()
 
 	if weights.Substitution != 2 {
 		t.Errorf("Expected Substitution weight to be 2, but got %d", weights.Substitution)
