@@ -53,7 +53,17 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 // The normalized distance is the distance divided by the sum of the lengths of the two strings, resulting in a value between 0 and 1.
 // This means that the normalized distance is 0 when the strings are identical and approaches 1 as the strings become more different.
 func NormalizedDistance(s1, s2 string, weights Weights, opts ...Option) float64 {
-	return float64(Distance(s1, s2, weights, opts...)) / float64(len(s1)+len(s2))
+	for _, opt := range opts {
+		opt(&s1, &s2)
+	}
+
+	// Options could influence the length of the strings, so we calculate the length after applying options.
+	totalLen := len(s1) + len(s2)
+	if totalLen == 0 {
+		return 0.0
+	}
+
+	return float64(Distance(s1, s2, weights)) / float64(totalLen)
 }
 
 // NormalizedSimilarity calculates the normalized similarity between two strings s1 and s2 using the provided weights for substitution, insertion, and deletion.
