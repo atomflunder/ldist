@@ -52,6 +52,6 @@ func commonSuffixLen(s1, s2 string) int {
 // commonAffixes returns the lengths of the common prefix and suffix of s1 and s2.
 func commonAffixes(s1, s2 string) (int, int) {
 	pre := commonPrefixLen(s1, s2)
-	suf := commonSuffixLen(s1, s2)
+	suf := commonSuffixLen(s1[pre:], s2[pre:])
 	return pre, suf
 }
