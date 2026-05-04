@@ -3,8 +3,8 @@ package ldist
 import "testing"
 
 func TestGetMatchingBlocks(t *testing.T) {
-	s1 := "kitten"
-	s2 := "sitting"
+	r1 := []rune("kitten")
+	r2 := []rune("sitting")
 
 	expected := []matchingBlock{
 		{srcPos: 1, destPos: 1, length: 3},
@@ -12,7 +12,7 @@ func TestGetMatchingBlocks(t *testing.T) {
 		{srcPos: 6, destPos: 7, length: 0},
 	}
 
-	actual := getMatchingBlocks(s1, s2)
+	actual := getMatchingBlocks(r1, r2)
 
 	if len(actual) != len(expected) {
 		t.Fatalf("Expected %d matching blocks, but got %d", len(expected), len(actual))

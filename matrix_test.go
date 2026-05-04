@@ -6,10 +6,10 @@ import (
 
 // TestGetMatrixEmptyS1 tests when s1 is empty
 func TestGetMatrixEmptyS1(t *testing.T) {
-	s1 := ""
-	s2 := "abc"
+	r1 := []rune("")
+	r2 := []rune("abc")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 3 {
 		t.Errorf("Expected distance 3, got %d", dist)
@@ -26,10 +26,10 @@ func TestGetMatrixEmptyS1(t *testing.T) {
 
 // TestGetMatrixEmptyS2 tests when s2 is empty
 func TestGetMatrixEmptyS2(t *testing.T) {
-	s1 := "abc"
-	s2 := ""
+	r1 := []rune("abc")
+	r2 := []rune("")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 3 {
 		t.Errorf("Expected distance 3, got %d", dist)
@@ -46,10 +46,10 @@ func TestGetMatrixEmptyS2(t *testing.T) {
 
 // TestGetMatrixIdenticalStrings tests when strings are identical
 func TestGetMatrixIdenticalStrings(t *testing.T) {
-	s1 := "abc"
-	s2 := "abc"
+	r1 := []rune("abc")
+	r2 := []rune("abc")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 0 {
 		t.Errorf("Expected distance 0 for identical strings, got %d", dist)
@@ -66,10 +66,10 @@ func TestGetMatrixIdenticalStrings(t *testing.T) {
 
 // TestGetMatrixSingleCharDifference tests with single character difference
 func TestGetMatrixSingleCharDifference(t *testing.T) {
-	s1 := "a"
-	s2 := "b"
+	r1 := []rune("a")
+	r2 := []rune("b")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 1 {
 		t.Errorf("Expected distance 1, got %d", dist)
@@ -86,30 +86,30 @@ func TestGetMatrixSingleCharDifference(t *testing.T) {
 
 // TestGetMatrixKittenSitting tests with "kitten" and "sitting"
 func TestGetMatrixKittenSitting(t *testing.T) {
-	s1 := "kitten"
-	s2 := "sitting"
+	r1 := []rune("kitten")
+	r2 := []rune("sitting")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 3 {
 		t.Errorf("Expected distance 3 between 'kitten' and 'sitting', got %d", dist)
 	}
 
-	if len(VP) != len(s2) {
-		t.Errorf("Expected VP length %d, got %d", len(s2), len(VP))
+	if len(VP) != len(r2) {
+		t.Errorf("Expected VP length %d, got %d", len(r2), len(VP))
 	}
 
-	if len(VN) != len(s2) {
-		t.Errorf("Expected VN length %d, got %d", len(s2), len(VN))
+	if len(VN) != len(r2) {
+		t.Errorf("Expected VN length %d, got %d", len(r2), len(VN))
 	}
 }
 
 // TestGetMatrixInsertionOnly tests case with only insertions needed
 func TestGetMatrixInsertionOnly(t *testing.T) {
-	s1 := "a"
-	s2 := "abc"
+	r1 := []rune("a")
+	r2 := []rune("abc")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 2 {
 		t.Errorf("Expected distance 2 (2 insertions), got %d", dist)
@@ -126,10 +126,10 @@ func TestGetMatrixInsertionOnly(t *testing.T) {
 
 // TestGetMatrixDeletionOnly tests case with only deletions needed
 func TestGetMatrixDeletionOnly(t *testing.T) {
-	s1 := "abc"
-	s2 := "a"
+	r1 := []rune("abc")
+	r2 := []rune("a")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 2 {
 		t.Errorf("Expected distance 2 (2 deletions), got %d", dist)
@@ -146,10 +146,10 @@ func TestGetMatrixDeletionOnly(t *testing.T) {
 
 // TestGetMatrixSubstitutionOnly tests case with only substitutions needed
 func TestGetMatrixSubstitutionOnly(t *testing.T) {
-	s1 := "abc"
-	s2 := "xyz"
+	r1 := []rune("abc")
+	r2 := []rune("xyz")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 3 {
 		t.Errorf("Expected distance 3 (3 substitutions), got %d", dist)
@@ -166,61 +166,59 @@ func TestGetMatrixSubstitutionOnly(t *testing.T) {
 
 // TestGetMatrixMixedOperations tests case with mixed operations
 func TestGetMatrixMixedOperations(t *testing.T) {
-	s1 := "qabxcd"
-	s2 := "abycdf"
+	r1 := []rune("qabxcd")
+	r2 := []rune("abycdf")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 3 {
 		t.Errorf("Expected distance 3, got %d", dist)
 	}
 
-	if len(VP) != len(s2) {
-		t.Errorf("Expected VP length %d, got %d", len(s2), len(VP))
+	if len(VP) != len(r2) {
+		t.Errorf("Expected VP length %d, got %d", len(r2), len(VP))
 	}
 
-	if len(VN) != len(s2) {
-		t.Errorf("Expected VN length %d, got %d", len(s2), len(VN))
+	if len(VN) != len(r2) {
+		t.Errorf("Expected VN length %d, got %d", len(r2), len(VN))
 	}
 }
 
 // TestGetMatrixLongerStrings tests with longer strings
 func TestGetMatrixLongerStrings(t *testing.T) {
-	s1 := "intention"
-	s2 := "execution"
+	r1 := []rune("intention")
+	r2 := []rune("execution")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 5 {
 		t.Errorf("Expected distance 5, got %d", dist)
 	}
 
-	if len(VP) != len(s2) {
-		t.Errorf("Expected VP length %d, got %d", len(s2), len(VP))
+	if len(VP) != len(r2) {
+		t.Errorf("Expected VP length %d, got %d", len(r2), len(VP))
 	}
 
-	if len(VN) != len(s2) {
-		t.Errorf("Expected VN length %d, got %d", len(s2), len(VN))
+	if len(VN) != len(r2) {
+		t.Errorf("Expected VN length %d, got %d", len(r2), len(VN))
 	}
 }
 
 // TestGetMatrixVectorsNotEmpty tests that VP and VN vectors are properly populated
 func TestGetMatrixVectorsNotEmpty(t *testing.T) {
-	s1 := "test"
-	s2 := "best"
+	r1 := []rune("test")
+	r2 := []rune("best")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
-	// Vectors should not be empty for non-empty s2
-	if len(VP) == 0 && len(s2) > 0 {
-		t.Errorf("VP should not be empty when s2 is not empty")
+	if len(VP) == 0 && len(r2) > 0 {
+		t.Errorf("VP should not be empty when r2 is not empty")
 	}
 
-	if len(VN) == 0 && len(s2) > 0 {
-		t.Errorf("VN should not be empty when s2 is not empty")
+	if len(VN) == 0 && len(r2) > 0 {
+		t.Errorf("VN should not be empty when r2 is not empty")
 	}
 
-	// Distance should be 1 (replace t with b)
 	if dist != 1 {
 		t.Errorf("Expected distance 1, got %d", dist)
 	}
@@ -228,11 +226,11 @@ func TestGetMatrixVectorsNotEmpty(t *testing.T) {
 
 // TestGetMatrixConsistency tests that the function produces consistent results
 func TestGetMatrixConsistency(t *testing.T) {
-	s1 := "hello"
-	s2 := "hallo"
+	r1 := []rune("hello")
+	r2 := []rune("hallo")
 
-	dist1, VP1, VN1 := getMatrix(s1, s2)
-	dist2, VP2, VN2 := getMatrix(s1, s2)
+	dist1, VP1, VN1 := getMatrix(r1, r2)
+	dist2, VP2, VN2 := getMatrix(r1, r2)
 
 	if dist1 != dist2 {
 		t.Errorf("Distance should be consistent: got %d and %d", dist1, dist2)
@@ -251,10 +249,10 @@ func TestGetMatrixConsistency(t *testing.T) {
 
 // TestGetMatrixSingleCharacter tests with single character strings
 func TestGetMatrixSingleCharacter(t *testing.T) {
-	s1 := "a"
-	s2 := "a"
+	r1 := []rune("a")
+	r2 := []rune("a")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 0 {
 		t.Errorf("Expected distance 0 for identical single characters, got %d", dist)
@@ -271,10 +269,10 @@ func TestGetMatrixSingleCharacter(t *testing.T) {
 
 // TestGetMatrixCaseSensitivity tests that the function is case-sensitive
 func TestGetMatrixCaseSensitivity(t *testing.T) {
-	s1 := "ABC"
-	s2 := "abc"
+	r1 := []rune("ABC")
+	r2 := []rune("abc")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 3 {
 		t.Errorf("Expected distance 3 (all different case), got %d", dist)
@@ -291,20 +289,20 @@ func TestGetMatrixCaseSensitivity(t *testing.T) {
 
 // TestGetMatrixUnicodeCharacters tests with unicode characters
 func TestGetMatrixUnicodeCharacters(t *testing.T) {
-	s1 := "hello"
-	s2 := "hallo"
+	r1 := []rune("hello")
+	r2 := []rune("hallo")
 
-	dist, VP, VN := getMatrix(s1, s2)
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist != 1 {
 		t.Errorf("Expected distance 1, got %d", dist)
 	}
 
-	if len(VP) != len(s2) {
-		t.Errorf("Expected VP length %d, got %d", len(s2), len(VP))
+	if len(VP) != len(r2) {
+		t.Errorf("Expected VP length %d, got %d", len(r2), len(VP))
 	}
 
-	if len(VN) != len(s2) {
-		t.Errorf("Expected VN length %d, got %d", len(s2), len(VN))
+	if len(VN) != len(r2) {
+		t.Errorf("Expected VN length %d, got %d", len(r2), len(VN))
 	}
 }

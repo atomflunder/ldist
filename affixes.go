@@ -1,46 +1,42 @@
 package ldist
 
-// trimPrefix trims the common prefix from s1 and s2, modifying the strings in place.
-func trimPrefix(s1, s2 *string) {
-	// Trims common prefix, speeds up calculations for long strings.
+// trimPrefix trims the common prefix from r1 and r2, returning the trimmed slices.
+func trimPrefix(r1, r2 []rune) ([]rune, []rune) {
 	start := 0
-	for start < len(*s1) && start < len(*s2) && (*s1)[start] == (*s2)[start] {
+	for start < len(r1) && start < len(r2) && r1[start] == r2[start] {
 		start++
 	}
-	if start > 0 {
-		*s1 = (*s1)[start:]
-		*s2 = (*s2)[start:]
-	}
-
+	return r1[start:], r2[start:]
 }
 
-// trimSuffix trims the common suffix from s1 and s2, modifying the strings in place.
-func trimSuffix(s1, s2 *string) {
-	for len(*s1) > 0 && len(*s2) > 0 && (*s1)[len(*s1)-1] == (*s2)[len(*s2)-1] {
-		*s1 = (*s1)[:len(*s1)-1]
-		*s2 = (*s2)[:len(*s2)-1]
+// trimSuffix trims the common suffix from r1 and r2, returning the trimmed slices.
+func trimSuffix(r1, r2 []rune) ([]rune, []rune) {
+	for len(r1) > 0 && len(r2) > 0 && r1[len(r1)-1] == r2[len(r2)-1] {
+		r1 = r1[:len(r1)-1]
+		r2 = r2[:len(r2)-1]
 	}
+	return r1, r2
 }
 
-// commonPrefixLen returns the length of the common prefix of s1 and s2.
-func commonPrefixLen(s1, s2 string) int {
-	m := min(len(s1), len(s2))
+// commonPrefixLen returns the length of the common prefix of r1 and r2.
+func commonPrefixLen(r1, r2 []rune) int {
+	m := min(len(r1), len(r2))
 	l := 0
 
-	for l < m && s1[l] == s2[l] {
+	for l < m && r1[l] == r2[l] {
 		l++
 	}
 
 	return l
 }
 
-// commonSuffixLen returns the length of the common suffix of s1 and s2.
-func commonSuffixLen(s1, s2 string) int {
-	m := min(len(s1), len(s2))
+// commonSuffixLen returns the length of the common suffix of r1 and r2.
+func commonSuffixLen(r1, r2 []rune) int {
+	m := min(len(r1), len(r2))
 	l := 0
 
-	s1 = s1[len(s1)-m:]
-	s2 = s2[len(s2)-m:]
+	s1 := r1[len(r1)-m:]
+	s2 := r2[len(r2)-m:]
 
 	for l < m && s1[len(s1)-1-l] == s2[len(s2)-1-l] {
 		l++
@@ -49,9 +45,10 @@ func commonSuffixLen(s1, s2 string) int {
 	return l
 }
 
-// commonAffixes returns the lengths of the common prefix and suffix of s1 and s2.
-func commonAffixes(s1, s2 string) (int, int) {
-	pre := commonPrefixLen(s1, s2)
-	suf := commonSuffixLen(s1[pre:], s2[pre:])
+// commonAffixes returns the lengths of the common prefix and suffix of r1 and r2.
+// The suffix is computed on the remaining part after the prefix to prevent overlap.
+func commonAffixes(r1, r2 []rune) (int, int) {
+	pre := commonPrefixLen(r1, r2)
+	suf := commonSuffixLen(r1[pre:], r2[pre:])
 	return pre, suf
 }

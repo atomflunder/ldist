@@ -2,29 +2,27 @@ package ldist
 
 // getMatrix computes the edit distance and returns the distance along with VP and VN vectors for each column.
 // These vectors are used to backtrace and find the actual edit operations.
-func getMatrix(s1, s2 string) (int, []uint64, []uint64) {
+func getMatrix(r1, r2 []rune) (int, []uint64, []uint64) {
 	// This implementation is taken from the RapidFuzz Python library:
 	// https://github.com/rapidfuzz/RapidFuzz
-	if len(s1) == 0 {
-		return len(s2), []uint64{}, []uint64{}
+	if len(r1) == 0 {
+		return len(r2), []uint64{}, []uint64{}
 	}
 
-	VP := uint64((1 << uint(len(s1))) - 1)
+	VP := uint64((1 << uint(len(r1))) - 1)
 	VN := uint64(0)
-	currDist := len(s1)
-	mask := uint64(1 << uint(len(s1)-1))
+	currDist := len(r1)
+	mask := uint64(1 << uint(len(r1)-1))
 
 	block := make(map[rune]uint64)
-	x := uint64(1)
-	for _, ch := range s1 {
-		block[ch] = block[ch] | x
-		x <<= 1
+	for i, ch := range r1 {
+		block[ch] |= 1 << uint(i)
 	}
 
-	matrixVP := make([]uint64, len(s2))
-	matrixVN := make([]uint64, len(s2))
+	matrixVP := make([]uint64, len(r2))
+	matrixVN := make([]uint64, len(r2))
 
-	for i, ch2 := range s2 {
+	for i, ch2 := range r2 {
 		// Step 1: Computing D0
 		PM_j := block[ch2]
 		X := PM_j

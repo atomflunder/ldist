@@ -1,5 +1,7 @@
 package ldist
 
+import "unicode/utf8"
+
 // Distance calculates the distance between two strings s1 and s2 using the provided weights for substitution, insertion, and deletion.
 // Can use options to modify the input strings before calculating the distance, such as converting to lowercase, removing whitespace, or removing punctuation.
 func Distance(s1, s2 string, weights Weights, opts ...Option) int {
@@ -7,17 +9,20 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 		opt(&s1, &s2)
 	}
 
-	trimPrefix(&s1, &s2)
-	trimSuffix(&s1, &s2)
+	r1 := []rune(s1)
+	r2 := []rune(s2)
 
-	if len(s1) == 0 {
-		return len(s2) * weights.Insertion
-	} else if len(s2) == 0 {
-		return len(s1) * weights.Deletion
+	r1, r2 = trimPrefix(r1, r2)
+	r1, r2 = trimSuffix(r1, r2)
+
+	if len(r1) == 0 {
+		return len(r2) * weights.Insertion
+	} else if len(r2) == 0 {
+		return len(r1) * weights.Deletion
 	}
 
-	n := len(s1)
-	m := len(s2)
+	n := len(r1)
+	m := len(r2)
 
 	prev := make([]int, m+1)
 	cur := make([]int, m+1)
@@ -29,7 +34,7 @@ func Distance(s1, s2 string, weights Weights, opts ...Option) int {
 		cur[0] = i * weights.Deletion
 		for j := 1; j <= m; j++ {
 			cost := 0
-			if s1[i-1] != s2[j-1] {
+			if r1[i-1] != r2[j-1] {
 				cost = weights.Substitution
 			}
 			del := prev[j] + weights.Deletion
@@ -58,7 +63,7 @@ func NormalizedDistance(s1, s2 string, weights Weights, opts ...Option) float64 
 	}
 
 	// Options could influence the length of the strings, so we calculate the length after applying options.
-	totalLen := len(s1) + len(s2)
+	totalLen := utf8.RuneCountInString(s1) + utf8.RuneCountInString(s2)
 	if totalLen == 0 {
 		return 0.0
 	}
@@ -89,11 +94,14 @@ func PartialSimilarity(s1, s2 string, weights Weights, opts ...Option) float64 {
 		return 1.0
 	}
 
-	var longer, shorter string
-	if len(s1) >= len(s2) {
-		longer, shorter = s1, s2
+	r1 := []rune(s1)
+	r2 := []rune(s2)
+
+	var longer, shorter []rune
+	if len(r1) >= len(r2) {
+		longer, shorter = r1, r2
 	} else {
-		longer, shorter = s2, s1
+		longer, shorter = r2, r1
 	}
 
 	blocks := getMatchingBlocks(longer, shorter)
@@ -128,12 +136,12 @@ func PartialSimilarity(s1, s2 string, weights Weights, opts ...Option) float64 {
 			end = len(longer)
 			start = end - len(shorter)
 		}
-		sub := longer[start:end]
+		sub := string(longer[start:end])
 
-		scores = append(scores, NormalizedSimilarity(sub, shorter, weights))
+		scores = append(scores, NormalizedSimilarity(sub, string(shorter), weights))
 	}
 
-	scores = append(scores, NormalizedSimilarity(longer, shorter, weights))
+	scores = append(scores, NormalizedSimilarity(string(longer), string(shorter), weights))
 
 	var maxScore float64
 	for _, score := range scores {

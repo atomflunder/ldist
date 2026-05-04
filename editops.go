@@ -16,33 +16,33 @@ type editop struct {
 	destPos int
 }
 
-// getEditops returns a slice of editop representing the edit operations needed to transform s1 into s2.
+// getEditops returns a slice of editop representing the edit operations needed to transform r1 into r2.
 // Uses the bit-parallel alignment algorithm by Heikki Hyyrö for efficient computation,
-// falling back to standard DP for strings longer than 64 bytes after affix trimming.
-func getEditops(s1, s2 string) []editop {
-	prefixLen, suffixLen := commonAffixes(s1, s2)
+// falling back to standard DP for strings longer than 64 runes after affix trimming.
+func getEditops(r1, r2 []rune) []editop {
+	prefixLen, suffixLen := commonAffixes(r1, r2)
 
-	s1Trimmed := s1[prefixLen : len(s1)-suffixLen]
-	s2Trimmed := s2[prefixLen : len(s2)-suffixLen]
+	r1Trimmed := r1[prefixLen : len(r1)-suffixLen]
+	r2Trimmed := r2[prefixLen : len(r2)-suffixLen]
 
-	if len(s1Trimmed) > 64 {
-		return getEditopsDP(s1Trimmed, s2Trimmed, prefixLen)
+	if len(r1Trimmed) > 64 {
+		return getEditopsDP(r1Trimmed, r2Trimmed, prefixLen)
 	}
 
-	return getEditopsBitParallel(s1Trimmed, s2Trimmed, prefixLen)
+	return getEditopsBitParallel(r1Trimmed, r2Trimmed, prefixLen)
 }
 
-// getEditopsBitParallel uses the Hyyrö bit-parallel algorithm. Only valid when len(s1) <= 64.
-func getEditopsBitParallel(s1Trimmed, s2Trimmed string, prefixLen int) []editop {
-	dist, VP, VN := getMatrix(s1Trimmed, s2Trimmed)
+// getEditopsBitParallel uses the Hyyrö bit-parallel algorithm. Only valid when len(r1) <= 64.
+func getEditopsBitParallel(r1, r2 []rune, prefixLen int) []editop {
+	dist, VP, VN := getMatrix(r1, r2)
 
 	if dist == 0 {
 		return []editop{}
 	}
 
 	editopList := make([]editop, dist)
-	col := len(s1Trimmed)
-	row := len(s2Trimmed)
+	col := len(r1)
+	row := len(r2)
 	d := dist
 
 	for row != 0 && col != 0 {
@@ -59,7 +59,7 @@ func getEditopsBitParallel(s1Trimmed, s2Trimmed string, prefixLen int) []editop 
 			} else {
 				col--
 
-				if col >= 0 && row >= 0 && s1Trimmed[col] != s2Trimmed[row] {
+				if col >= 0 && row >= 0 && r1[col] != r2[row] {
 					d--
 					editopList[d] = editop{tag: tagReplace, srcPos: col + prefixLen, destPos: row + prefixLen}
 				}
@@ -83,10 +83,10 @@ func getEditopsBitParallel(s1Trimmed, s2Trimmed string, prefixLen int) []editop 
 }
 
 // getEditopsDP uses a standard Wagner-Fischer DP matrix with backtrace.
-// Handles strings of any length, used as a fallback when s1 exceeds 64 bytes.
-func getEditopsDP(s1, s2 string, prefixLen int) []editop {
-	n := len(s1)
-	m := len(s2)
+// Handles strings of any length, used as a fallback when r1 exceeds 64 runes.
+func getEditopsDP(r1, r2 []rune, prefixLen int) []editop {
+	n := len(r1)
+	m := len(r2)
 
 	dp := make([][]int, n+1)
 	for i := range dp {
@@ -99,7 +99,7 @@ func getEditopsDP(s1, s2 string, prefixLen int) []editop {
 
 	for i := 1; i <= n; i++ {
 		for j := 1; j <= m; j++ {
-			if s1[i-1] == s2[j-1] {
+			if r1[i-1] == r2[j-1] {
 				dp[i][j] = dp[i-1][j-1]
 			} else {
 				sub := dp[i-1][j-1] + 1
@@ -120,7 +120,7 @@ func getEditopsDP(s1, s2 string, prefixLen int) []editop {
 	i, j, d := n, m, dist
 
 	for i > 0 && j > 0 {
-		if s1[i-1] == s2[j-1] {
+		if r1[i-1] == r2[j-1] {
 			i--
 			j--
 		} else if dp[i-1][j-1] <= dp[i-1][j] && dp[i-1][j-1] <= dp[i][j-1] {

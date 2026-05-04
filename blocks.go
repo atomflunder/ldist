@@ -8,9 +8,9 @@ type matchingBlock struct {
 	length  int
 }
 
-// getMatchingBlocks returns a slice of MatchingBlock representing the matching blocks between s1 and s2.
-func getMatchingBlocks(s1, s2 string) []matchingBlock {
-	editops := getEditops(s1, s2)
+// getMatchingBlocks returns a slice of MatchingBlock representing the matching blocks between r1 and r2.
+func getMatchingBlocks(r1, r2 []rune) []matchingBlock {
+	editops := getEditops(r1, r2)
 
 	matchingBlocks := []matchingBlock{}
 
@@ -36,14 +36,14 @@ func getMatchingBlocks(s1, s2 string) []matchingBlock {
 		}
 	}
 
-	if srcPos < len(s1) || destPos < len(s2) {
-		l := min(len(s1)-srcPos, len(s2)-destPos)
+	if srcPos < len(r1) || destPos < len(r2) {
+		l := min(len(r1)-srcPos, len(r2)-destPos)
 		if l > 0 {
 			matchingBlocks = append(matchingBlocks, matchingBlock{srcPos: srcPos, destPos: destPos, length: l})
 		}
 	}
 
-	matchingBlocks = append(matchingBlocks, matchingBlock{srcPos: len(s1), destPos: len(s2), length: 0})
+	matchingBlocks = append(matchingBlocks, matchingBlock{srcPos: len(r1), destPos: len(r2), length: 0})
 
 	return matchingBlocks
 }
