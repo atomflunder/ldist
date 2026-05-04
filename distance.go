@@ -64,7 +64,7 @@ func NormalizedSimilarity(s1, s2 string, weights Weights, opts ...Option) float6
 }
 
 // PartialSimilarity calculates the partial similarity between two strings s1 and s2 using the provided weights for substitution, insertion, and deletion.
-// The partial similarity is a measure of how similar the shorter string is to any substring of the longer string.
+// The partial similarity is a measure of how similar the shorter string is to any substring of the longer string, with a penalty based on differing lengths.
 // This may yield more desirable results when comparing strings of vastly differing lengths, depending on the use-case.
 func PartialSimilarity(s1, s2 string, weights Weights, opts ...Option) float64 {
 	for _, opt := range opts {
