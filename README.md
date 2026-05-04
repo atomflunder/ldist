@@ -141,7 +141,7 @@ fmt.Printf("Normalized Similarity: %.2f\n", normalizedSim)
 
 ### Partial Matching
 
-You can also calculate the distance between two strings using partial matching, which finds the best matching substring in the longer string and calculates the distance based on that.
+You can also calculate the distance between two strings using partial matching, which finds the best matching substring in the longer string and calculates the distance based on that, with a penalty based on differing lengths.
 
 ```go
 import (
