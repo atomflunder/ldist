@@ -113,7 +113,12 @@ func PartialSimilarity(s1, s2 string, weights Weights, opts ...Option) float64 {
 
 	for _, block := range filteredBlocks {
 		start := max(0, block.srcPos-block.destPos)
-		sub := longer[start : start+len(shorter)]
+		end := start + len(shorter)
+		if end > len(longer) {
+			end = len(longer)
+			start = end - len(shorter)
+		}
+		sub := longer[start:end]
 
 		scores = append(scores, NormalizedSimilarity(sub, shorter, weights))
 	}
