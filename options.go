@@ -1,6 +1,9 @@
 package ldist
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+)
 
 // Option is a type alias for a function that takes two string pointers which should modify them in place.
 type Option func(s1, s2 *string)
@@ -12,7 +15,16 @@ func ToLowercase(s1, s2 *string) {
 
 // RemoveWhitespace removes all whitespace characters from both strings.
 func RemoveWhitespace(s1, s2 *string) {
-	*s1, *s2 = strings.ReplaceAll(*s1, " ", ""), strings.ReplaceAll(*s2, " ", "")
+	removeWS := func(s string) string {
+		var sb strings.Builder
+		for _, r := range s {
+			if !unicode.IsSpace(r) {
+				sb.WriteRune(r)
+			}
+		}
+		return sb.String()
+	}
+	*s1, *s2 = removeWS(*s1), removeWS(*s2)
 }
 
 // RemovePunctuation removes common punctuation characters from both strings.
